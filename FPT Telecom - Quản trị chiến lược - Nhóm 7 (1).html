@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FPT Telecom - Quản trị chiến lược - Nhóm 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--page:#e6e3d3;--navy:#243b6b;--or:#f47920;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#14161c}}
+:root[data-theme="dark"]{--page:#14161c}
+html,body{height:100%;margin:0}
+body{background:var(--page);display:grid;place-items:center;font-family:"Montserrat",Arial,Helvetica,sans-serif;overflow:hidden}
+.deck{position:relative;width:min(100vw,calc((100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))*16/9));aspect-ratio:16/9;container-type:inline-size;overflow:hidden;background:#f7f4e6;box-shadow:0 1cqw 4cqw rgba(0,0,0,.25)}
+canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.arc{position:absolute;border:.12cqw solid #38bdf8;border-radius:50%;opacity:.7;animation:sw 16s ease-in-out infinite}
+.a1{width:46cqw;height:46cqw;left:-4cqw;top:-46cqw}.a2{width:30cqw;height:30cqw;left:-16cqw;top:34cqw;animation-direction:reverse}
+@keyframes sw{50%{transform:translate(2cqw,1.5cqw) scale(1.06)}}
+.deck[data-i="0"] :is(.arc,.logo),.deck[data-i="13"] :is(.arc,.logo){display:none}
+.logo{position:absolute;right:2.4cqw;top:2.4cqw;z-index:3;display:flex;align-items:center;gap:.5cqw;padding:.8cqw 1.8cqw;border:.1cqw solid #bae6fd;border-radius:3.4cqw;background:rgba(255,255,255,.55);font-weight:900;font-size:2.4cqw;font-style:italic;animation:glow 3s ease-in-out infinite}
+.lg{display:inline-flex;align-items:center;gap:.4cqw;font-weight:900;font-style:italic}
+.lg i{display:grid;place-items:center;width:1.1em;height:1.25em;color:#fff;border-radius:.12em;transform:skewX(-8deg)}
+.lg small{font-size:.68em;font-style:normal;font-weight:700;color:#1d5fa8;margin-left:.3em}
+@keyframes glow{50%{box-shadow:0 0 1.6cqw rgba(56,189,248,.55)}}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;z-index:2}
+.slide.on{opacity:1;visibility:visible}
+h1{position:absolute;left:3.2cqw;top:4.6cqw;margin:0;font-size:3.4cqw;color:var(--navy)}
+h1.b{color:#0b86d6}
+h1.long{width:64cqw;font-size:2.5cqw;line-height:1.35;top:4cqw}
+.on h1{animation:title 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes title{from{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-2cqw)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.cards{position:absolute;left:3.2cqw;right:3.2cqw;top:17.5cqw;bottom:6.6cqw;display:flex;align-items:stretch;gap:3.2cqw}
+.card{flex:1;position:relative;background:#fff;border-radius:1.8cqw;padding:2.2cqw 2.5cqw;box-shadow:0 .3cqw 1cqw rgba(0,0,0,.12);overflow:hidden;opacity:0;transition:transform .3s,box-shadow .3s}
+.card:hover{transform:translateY(-.5cqw);box-shadow:0 .8cqw 2cqw rgba(0,0,0,.2)}
+.card::before{content:"";position:absolute;left:0;top:0;height:.55cqw;width:100%;background:var(--c);transform-origin:left}
+.card::after{content:"";position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.7),transparent);transform:skewX(-20deg)}
+.on .card{animation:rise .9s cubic-bezier(.2,.8,.2,1) .5s both}
+.on .card~.card,.on .arrow~.card{animation-delay:.9s}
+.on .card::before{animation:bar 1s ease-out 1s both}
+.on .card::after{animation:shine 1.2s ease-out 2.4s both}
+@keyframes rise{from{opacity:0;transform:translateY(4cqw)}to{opacity:1;transform:none}}
+@keyframes bar{from{transform:scaleX(0)}}
+@keyframes shine{to{left:130%}}
+.head{display:flex;align-items:center;gap:1.4cqw;margin-bottom:2cqw}
+.ico{width:4.4cqw;height:4.4cqw;flex:none;border-radius:1.2cqw;display:grid;place-items:center;font-size:2.2cqw;background:color-mix(in srgb,var(--c) 10%,#fff)}
+.on .ico{animation:pop .7s cubic-bezier(.3,1.6,.5,1) 1.2s both}
+@keyframes pop{from{transform:scale(0) rotate(-40deg)}}
+.tag{display:inline-block;padding:.3cqw 1cqw;border-radius:.8cqw;font-size:1.3cqw;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 12%,#fff);margin-bottom:.5cqw}
+h2{margin:0;font-size:1.9cqw;color:#0f172a}
+.solo{display:flex;align-items:center}
+ul{list-style:none;margin:0;padding:0}
+li{position:relative;padding-left:2.6cqw;margin-bottom:1.4cqw;font-size:1.36cqw;line-height:1.6;font-weight:700;color:var(--c);opacity:0}
+li::before{content:var(--m,"✔");position:absolute;left:0;top:.1cqw;font-size:1.2cqw}
+.on li{animation:inl .6s ease-out calc(1.4s + var(--i)*.5s) both}
+@keyframes inl{from{opacity:0;transform:translateX(-1.6cqw)}to{opacity:1;transform:none}}
+.arrow{align-self:center;width:4.4cqw;height:4.4cqw;flex:none;margin:0 -1.7cqw;border-radius:50%;background:#fff;box-shadow:0 .2cqw .8cqw rgba(0,0,0,.3);display:grid;place-items:center;font-size:2.2cqw;z-index:2;opacity:0}
+.on .arrow{animation:rise .6s ease 1.3s both,nudge 1.6s ease-in-out 2s infinite}
+@keyframes nudge{50%{transform:translateX(.6cqw)}}
+.line{position:absolute;left:1.6cqw;right:1.6cqw;bottom:5.2cqw;height:.15cqw;background:#3b3b3b;z-index:2;transform-origin:left;animation:bar 1.2s ease-out both}
+/* cover */
+.cv0{background:#fff}
+.cover-decor{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 70% 54%,rgba(56,189,248,.07),transparent 30%),radial-gradient(ellipse at 20% 75%,rgba(244,121,32,.05),transparent 34%),repeating-linear-gradient(135deg,transparent 0 10cqw,rgba(36,59,107,.018) 10.1cqw 10.2cqw)}
+.cover-decor .orbit{position:absolute;right:8cqw;top:18cqw;width:18cqw;height:18cqw;border:.1cqw solid rgba(56,189,248,.27);border-radius:50%;animation:coverOrbit 24s linear infinite}
+.cover-decor .o2{right:6.8cqw;top:16.5cqw;width:20cqw;height:20cqw;border:.08cqw dashed rgba(244,121,32,.2);animation-direction:reverse;animation-duration:32s}
+.cover-decor .orbit::before{content:"";position:absolute;left:15%;top:10%;width:.8cqw;height:.8cqw;border-radius:50%;background:#38bdf8;box-shadow:0 0 1.2cqw rgba(56,189,248,.8)}
+.cover-decor .o2::before{left:auto;top:auto;right:14%;bottom:12%;background:#f47920;box-shadow:0 0 1.2cqw rgba(244,121,32,.75)}
+.cover-decor .spark{position:absolute;width:.48cqw;height:.48cqw;border-radius:50%;background:#38bdf8;box-shadow:0 0 .65cqw rgba(56,189,248,.42);animation:coverFloat 3.8s ease-in-out infinite alternate}
+.cover-decor .s1{left:8cqw;top:19cqw}.cover-decor .s2{left:48cqw;top:17cqw;animation-delay:.7s;background:#f47920}.cover-decor .s3{left:43cqw;bottom:8cqw;animation-delay:1.3s}.cover-decor .s4{right:42cqw;bottom:7cqw;animation-delay:1.8s;background:#f47920}
+.ctl,.ct,.ring{z-index:2}
+@keyframes coverOrbit{to{transform:rotate(360deg)}}
+@keyframes coverFloat{to{transform:translate3d(0,-1.2cqw,0);opacity:.45}}
+.w1{position:absolute;right:-6cqw;top:-6cqw;width:48cqw;height:68cqw;background:var(--or);transform:skewX(-14deg)}
+.w2{position:absolute;left:-8cqw;bottom:-4cqw;width:30cqw;height:10cqw;background:#1b2a5a;transform:skewX(-14deg) rotate(0)}
+.w3{position:absolute;right:20cqw;top:-8cqw;width:26cqw;height:8cqw;background:#1b2a5a;transform:skewX(-14deg)}
+.on .w1{animation:slr 1s cubic-bezier(.2,.8,.2,1) both}.on .w2{animation:sll 1s .2s both}.on .w3{animation:sld 1s .3s both}
+@keyframes slr{from{transform:translateX(30cqw) skewX(-14deg)}}@keyframes sll{from{transform:translateX(-30cqw) skewX(-14deg)}}@keyframes sld{from{transform:translateY(-12cqw) skewX(-14deg)}}
+.ct{position:absolute;left:5cqw;top:16cqw;width:52cqw;text-align:center}
+.ct h3{margin:0;color:var(--or);font-size:2.55cqw;line-height:1.35;font-weight:900}
+.ct p{margin:1.4cqw 0 0;color:#0b6fb8;font-weight:700;font-size:1.15cqw;line-height:1.7}
+.on .ct h3{animation:title 1.2s .4s both}.on .ct p{animation:rise 1s 1.2s both}
+.ring{position:absolute;right:6cqw;top:12cqw;width:30cqw;height:30cqw;border-radius:50%;border:.7cqw solid #fff;background:#fff;display:grid;place-items:center;font-size:5.4cqw;box-shadow:0 1cqw 3cqw rgba(0,0,0,.3)}
+.ring::after{content:"";position:absolute;inset:-2cqw;border-radius:50%;border:.25cqw dashed #fff;animation:spin 30s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.on .ring{animation:pop 1s .6s cubic-bezier(.3,1.4,.5,1) both}
+.ctl{position:absolute;left:3cqw;top:3cqw;font-size:4.4cqw}
+/* members */
+.mem{position:absolute;left:3.2cqw;right:3.2cqw;top:17cqw;display:grid;grid-template-columns:repeat(6,1fr);gap:2.4cqw}
+.m{grid-column:span 2;display:flex;align-items:center;gap:1.4cqw;background:#fff;border-radius:1.4cqw;padding:2cqw;box-shadow:0 .3cqw 1cqw rgba(0,0,0,.12);opacity:0}
+.m:nth-child(4){grid-column:2/4}.m:nth-child(5){grid-column:4/6}
+.m .ico{background:#e0f2fe;font-size:2cqw}
+.m b{display:block;font-size:1.5cqw;color:#0f172a}.m span{font-size:1.15cqw;color:#0b86d6;font-weight:700}
+.on .m{animation:rise .7s calc(.5s + var(--i)*.18s) both}
+/* intro + pestel */
+.environment-title{max-width:62cqw;font-size:3cqw;line-height:1.2}
+.environment-photo{position:absolute;right:3.4cqw;top:8.8cqw;width:24cqw;height:17.5cqw;margin:0;padding:.35cqw;border:.12cqw solid rgba(36,59,107,.2);border-radius:1.1cqw;background:#fff;box-shadow:0 .45cqw 1.4cqw rgba(15,35,60,.2);overflow:hidden;opacity:0;cursor:zoom-in}
+.environment-photo:focus-visible{outline:.2cqw solid #1671f5;outline-offset:.25cqw}
+.environment-photo img{width:100%;height:100%;display:block;object-fit:cover;border-radius:.7cqw}
+.environment-photo figcaption{position:absolute;left:.35cqw;right:.35cqw;bottom:.35cqw;padding:.55cqw .8cqw;border-radius:0 0 .65cqw .65cqw;background:linear-gradient(transparent,rgba(8,28,54,.88));color:#fff;font-size:.82cqw;font-weight:700}
+.on .environment-photo{animation:rise .8s .25s ease-out both}
+.environment-cards{top:27.5cqw}
+.image-lightbox{position:fixed;max-width:94vw;max-height:94vh;width:max-content;padding:1.1rem;border:1px solid rgba(255,255,255,.55);border-radius:1rem;background:#101827;color:#fff;box-shadow:0 1rem 4rem rgba(0,0,0,.5);overflow:visible}
+.image-lightbox[open]{animation:lightboxIn .2s ease-out both}
+.image-lightbox::backdrop{background:rgba(5,12,24,.82);backdrop-filter:blur(5px)}
+.image-lightbox img{display:block;width:min(78vw,1200px);max-width:88vw;max-height:82vh;object-fit:contain;border-radius:.5rem}
+.image-lightbox p{margin:.8rem 2.8rem 0 0;font-size:.95rem;font-weight:700}
+.image-lightbox button{position:absolute;top:.35rem;right:.35rem;width:2.5rem;height:2.5rem;border:1px solid rgba(255,255,255,.6);border-radius:50%;background:#fff;color:#10294d;font-size:1.6rem;line-height:1;cursor:pointer}
+@keyframes lightboxIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.int{position:absolute;left:4cqw;top:14cqw;width:40cqw;font-size:3.7cqw;line-height:1.25;font-weight:900;color:var(--or)}
+.on .int{animation:title 1.1s .3s both}
+.video-frame{position:absolute;right:8cqw;top:8cqw;width:30cqw;height:41cqw;padding:.55cqw;border-radius:2cqw;background:linear-gradient(145deg,#38bdf8,#2563eb 38%,#f47920 78%,#fbbf24);box-shadow:0 1cqw 3cqw rgba(15,45,90,.28),0 0 2cqw rgba(56,189,248,.26);overflow:hidden}
+.video-frame::before{content:"";position:absolute;inset:.2cqw;border:1px solid rgba(255,255,255,.65);border-radius:1.65cqw;pointer-events:none;z-index:2}
+.video-frame::after{content:"";position:absolute;left:-30%;right:-30%;top:-25%;height:35%;background:linear-gradient(180deg,transparent,rgba(255,255,255,.16),transparent);transform:rotate(-12deg);animation:vscan 4s ease-in-out infinite;pointer-events:none;z-index:2}
+.video-frame video{display:block;width:100%;height:100%;border-radius:1.5cqw;background:#101827;object-fit:cover}
+.video-label{position:absolute;left:1.5cqw;top:1.5cqw;z-index:3;padding:.55cqw 1cqw;border:1px solid rgba(255,255,255,.45);border-radius:2cqw;background:rgba(12,35,68,.72);backdrop-filter:blur(8px);color:#fff;font-size:1cqw;font-weight:800;letter-spacing:.08em}
+@keyframes vscan{0%,20%{transform:translateY(-15cqw) rotate(-12deg);opacity:0}45%{opacity:1}80%,100%{transform:translateY(60cqw) rotate(-12deg);opacity:0}}
+@keyframes pulse{from{transform:scale(.4);opacity:.6}to{transform:scale(1.2);opacity:0}}
+.on .video-frame{animation:rise 1s .5s both,videoGlow 3.2s ease-in-out 1.5s infinite alternate}
+@keyframes videoGlow{to{box-shadow:0 1.2cqw 3.5cqw rgba(15,45,90,.36),0 0 2.8cqw rgba(56,189,248,.5)}}
+.pl{position:absolute;left:3.2cqw;right:3.2cqw;top:25cqw;display:flex;gap:1.8cqw}
+.pl::before{content:"";position:absolute;left:2cqw;right:2cqw;top:-2.6cqw;height:.25cqw;background:#38bdf8;transform-origin:left}
+.on .pl::before{animation:bar 2s .4s ease-out both}
+.p{flex:1;background:#fff;border-radius:1.4cqw;padding:2cqw 1.2cqw;text-align:center;box-shadow:0 .3cqw 1cqw rgba(0,0,0,.12);border-top:.5cqw solid var(--c);opacity:0;transition:transform .3s}
+.p:hover{transform:translateY(-.7cqw)}
+.p em{display:grid;place-items:center;width:3.6cqw;height:3.6cqw;margin:0 auto 1.2cqw;border-radius:50%;background:var(--c);color:#fff;font-style:normal;font-weight:700;font-size:1.8cqw}
+.p b{font-size:1.45cqw;color:#0f172a;line-height:1.4}.p div{font-size:2.4cqw;margin-top:1cqw}
+.on .p{animation:rise .7s calc(.6s + var(--i)*.25s) both}
+/* section + thanks */
+.big{position:absolute;left:0;right:0;top:20cqw;text-align:center;color:var(--navy);font-family:"Montserrat",Arial,Helvetica,sans-serif;font-size:clamp(2rem,4cqw,4.4rem);font-weight:900;line-height:1.15;padding:0 8cqw}
+.on .big{animation:title 1.2s .3s both}
+.tg{position:absolute;left:50%;top:12cqw;width:8cqw;height:8cqw;margin-left:-4cqw;font-size:4.4cqw;display:grid;place-items:center}
+.tg::before,.tg::after{content:"";position:absolute;inset:0;border-radius:50%;border:.3cqw solid #2563eb;animation:pulse 2.4s ease-out infinite}.tg::after{animation-delay:1.2s}
+.th{background:#fff}
+.th .big{color:var(--or);font-size:6.4cqw;top:22cqw}
+.th small{position:absolute;left:0;right:0;text-align:center;font-weight:700;color:#0b6fb8;font-size:2cqw;opacity:0}
+.on .th small{animation:rise .8s 1s both}
+/* table */
+.sub{position:absolute;left:3.2cqw;top:8cqw;font-size:1.1cqw;color:#475569;font-weight:700}
+.tbl{position:absolute;left:3.2cqw;top:10.6cqw;width:calc(100% - 6.4cqw);border-collapse:collapse;font-size:1cqw;background:#fff;box-shadow:0 .3cqw 1cqw rgba(0,0,0,.12)}
+.tbl th,.tbl td{padding:.5cqw .5cqw;text-align:center;border-bottom:.08cqw solid #e5e7eb}
+.tbl td:first-child,.tbl th:first-child{text-align:left;font-weight:700;color:#0f172a;padding-left:1cqw}
+.tbl th{background:#243b6b;color:#fff;font-size:.95cqw}.tbl th.g{background:var(--c);font-size:1.15cqw}.tbl th,.tbl th:first-child{color:#fff}.tbl tr:nth-child(2) th:first-child{text-align:center;padding-left:.5cqw}
+.tbl tr{opacity:0}.on .tbl tr{animation:inl .5s ease-out calc(.5s + var(--i)*.12s) both}
+.tbl tr:hover td{background:#f1f5f9}
+.tbl .tt td{font-weight:700;background:#f8fafc;position:relative}
+.bar{display:block;height:.45cqw;margin-top:.3cqw;background:var(--c);border-radius:.3cqw;width:0}
+.on .bar{animation:grow 1.4s 2.6s ease-out both}
+@keyframes grow{to{width:var(--w)}}
+.best{color:#dc2626}
+.efe-wrap{position:absolute;inset:7.4cqw 1.6cqw 5.8cqw;background:#fff;border:.12cqw solid rgba(36,59,107,.2);border-radius:.7cqw;overflow:hidden;box-shadow:0 .25cqw .9cqw rgba(0,0,0,.12)}
+.efe{width:100%;height:100%;table-layout:fixed;border-collapse:collapse;font-size:.7cqw;line-height:1.12;color:#172033}
+.efe th,.efe td{padding:.23cqw .4cqw;border:1px solid #d7dee8;text-align:left;vertical-align:middle}
+.efe .efe-title th{height:3.2cqw;background:#073b70;color:#fff;text-align:center;font-size:1.12cqw;font-weight:900;letter-spacing:.025em}
+.efe .efe-head th{background:#1671f5;color:#fff;text-align:center;font-size:.78cqw;font-weight:800}
+.efe .efe-group td{height:2.2cqw;text-align:center;font-weight:900;font-size:.78cqw;letter-spacing:.04em}
+.efe .efe-opportunity td{background:#d4e9e1;color:#155e43}
+.efe .efe-threat td{background:#f8d9dc;color:#9f2631}
+.efe .efe-data td:first-child{font-weight:600}
+.efe .efe-data a{color:inherit;text-decoration:underline;text-decoration-color:rgba(22,113,245,.45);text-underline-offset:.12em}
+.efe .efe-data a:hover{color:#075fc9;text-decoration-color:currentColor}
+.efe .efe-data td:nth-child(2),.efe .efe-data td:nth-child(3),.efe .efe-data td:nth-child(4){text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+.efe .efe-total td{height:2.8cqw;background:#073b70;color:#fff;font-weight:900}
+.efe .efe-total td:nth-child(2),.efe .efe-total td:nth-child(4){text-align:center}
+.on .efe tr{animation:inl .45s ease-out calc(.15s + var(--i)*.055s) both}
+.cpm-intro{position:absolute;inset:0;background:#111;overflow:hidden}
+.cpm-photo{position:absolute;left:2.4cqw;top:5.2cqw;bottom:0;width:40.2cqw;border:.18cqw solid #8b35ff;overflow:hidden;box-shadow:0 0 1.8cqw rgba(139,53,255,.32)}
+.cpm-photo img{width:100%;height:100%;display:block;object-fit:cover;animation:cpmPhoto 1.1s cubic-bezier(.2,.8,.2,1) both}
+.cpm-panel{position:absolute;left:44.2cqw;right:1.2cqw;top:0;bottom:0;padding:9cqw 4cqw 4cqw;background:linear-gradient(145deg,rgba(250,249,239,.98),rgba(247,244,230,.93));border-radius:5cqw 0 0 5cqw;box-shadow:-1cqw 0 3cqw rgba(0,0,0,.2);overflow:hidden}
+.cpm-panel::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 75% 55%,rgba(255,255,255,.65),transparent 65%),repeating-linear-gradient(135deg,transparent 0 7cqw,rgba(36,59,107,.025) 7.1cqw 7.2cqw);pointer-events:none}
+.cpm-heading{position:relative;margin:0;text-align:center;color:var(--navy);font-size:3.1cqw;font-weight:800;line-height:1.25;letter-spacing:.015em}
+.cpm-logos{position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center;justify-items:center;column-gap:2cqw;row-gap:4.7cqw;margin-top:6.4cqw}
+.cpm-brand{height:8cqw;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;animation:cpmBrand .65s ease-out both}
+.cpm-brand:nth-child(2){animation-delay:.12s}.cpm-brand:nth-child(3){animation-delay:.24s}.cpm-brand:nth-child(4){animation-delay:.36s}
+.cpm-brand img{display:block;width:22cqw;height:8cqw;max-width:none;max-height:none;object-fit:contain}
+.cpm-brand:nth-child(3) img{transform:translateY(-1.6cqw) scale(1.5)}
+@keyframes cpmPhoto{from{opacity:.5;transform:scale(1.035)}to{opacity:1;transform:scale(1)}}
+@keyframes cpmBrand{from{opacity:0;transform:translateY(1cqw)}to{opacity:1;transform:translateY(0)}}
+.rem{position:absolute;left:3.2cqw;right:3.2cqw;top:45.6cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2cqw;font-size:.95cqw;line-height:1.5;font-weight:700}
+.rem div{background:#fff;border-left:.4cqw solid var(--c);padding:.7cqw 1cqw;border-radius:.6cqw;opacity:0}
+.on .rem div{animation:rise .6s calc(2s + var(--i)*.2s) both}
+/* nav */
+.nav{position:absolute;left:0;right:0;bottom:1.1cqw;z-index:4;display:flex;justify-content:center;align-items:center;gap:1cqw}
+.nav button{border:0;background:var(--navy);color:#fff;width:3cqw;height:3cqw;border-radius:50%;font-size:1.3cqw;cursor:pointer}
+.nav button:focus-visible{outline:.25cqw solid #f5b700;outline-offset:.2cqw}
+.dot{display:inline-block;width:.8cqw;height:.8cqw;border-radius:50%;margin:0 .3cqw;background:#b8c2d9;transition:.3s;cursor:pointer}
+.dot.on{background:#f47920;transform:scale(1.5)}
+.prog{position:absolute;left:0;bottom:0;height:.45cqw;background:#f47920;transition:width .5s;z-index:4}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck" data-i="0">
+<canvas id="cv"></canvas>
+<div class="arc a1"></div><div class="arc a2"></div>
+<div class="logo" id="lg"></div>
+<div id="sl"></div>
+<div class="nav"><button id="pv" aria-label="Trang trước">◀</button><span id="dots"></span><button id="nx" aria-label="Trang sau">▶</button></div>
+<div class="prog" id="pg"></div>
+</div>
+<dialog class="image-lightbox" id="imageLightbox" aria-label="Ảnh bản đồ phóng to">
+  <button type="button" id="closeImageLightbox" aria-label="Đóng ảnh phóng to" autofocus>×</button>
+  <img id="imageLightboxContent" alt="">
+  <p>Các tuyến cáp quang biển trong khu vực</p>
+</dialog>
+<script>
+const LG=(s)=>`<span class="lg" style="font-size:${s}cqw"><i style="background:#1d5fa8">F</i><i style="background:#f47920">P</i><i style="background:#2bb24c">T</i><small>Telecom</small></span>`;
+document.getElementById('lg').innerHTML='<img class="lgi" src="logo-fpt.png" alt="FPT Telecom" data-s="2.4" data-t="1" style="height:4.4cqw;display:block">';
+const card=(c,tag,h,ico,items,m,solo)=>`<div class="card" style="--c:${c};--m:'${m||'✔'}'"><div class="head ${solo?'solo':''}"><div class="ico">${ico}</div>${solo?`<h2>${h}</h2>`:`<div><span class="tag">${tag}</span><h2>${h}</h2></div>`}</div><ul>${items.map((t,i)=>`<li style="--i:${i}">${t}</li>`).join('')}</ul></div>`;
+const two=(t,a,b,ln,ar)=>`<h1>${t}</h1><div class="cards">${a}${ar?'<div class="arrow">➜</div>':''}${b}</div>${ln?'<div class="line"></div>':''}`;
+const mem=[['Lê Thành Tài','2521002058'],['Võ Anh Kiệt','2521001715'],['Nguyễn Minh Thuận','2521002154'],['Vũ Chiến Nguyên','2521001904'],['Lê Thị Hồng Thắm','2521002066']];
+const pe=[['Chính trị - Chính phủ - Pháp luật','⚖️','#2563eb'],['Kinh tế','💰','#ea580c'],['Văn hóa - Xã hội','👥','#16a34a'],['Môi trường và tự nhiên','🌍','#0d9488']];
+const R=[['1. Thị phần và số thuê bao','0,15',2,'0,30',4,'0,60',3,'0,45',3,'0,45'],['2. Độ phủ hạ tầng mạng','0,15',2,'0,30',4,'0,60',3,'0,45',4,'0,60'],['3. Chất lượng và tốc độ truyền mạng','0,10',2,'0,20',4,'0,40',3,'0,30',4,'0,40'],['4. Giá cước cạnh tranh','0,10',3,'0,30',4,'0,40',3,'0,30',3,'0,30'],['5. Chăm sóc khách hàng và thương hiệu','0,10',4,'0,40',3,'0,30',3,'0,30',4,'0,40'],['6. Đa dạng sản phẩm, dịch vụ','0,10',3,'0,30',4,'0,40',4,'0,40',4,'0,40'],['7. Trung tâm dữ liệu và cáp quang quốc tế','0,10',3,'0,30',4,'0,40',4,'0,40',3,'0,30'],['8. Năng lực tài chính và đầu tư','0,10',3,'0,30',4,'0,40',3,'0,30',4,'0,40'],['9. Đổi mới và dịch vụ số (smart home, Wi-Fi AI)','0,10',4,'0,40',3,'0,30',3,'0,30',2,'0,20']];
+const CO=[['FPT','#f47920','2,80'],['Viettel','#dc2626','3,80'],['VNPT','#2563eb','3,20'],['MobiFone','#0e9f6e','3,45']];
+const tbl=`<h1 style="font-size:2.5cqw;top:3.4cqw">III. MA TRẬN HÌNH ẢNH CẠNH TRANH (CPM)</h1><div class="sub">So sánh FPT, Viettel, VNPT và MobiFone theo 9 yếu tố then chốt (đánh giá 1–4, điểm = đánh giá × trọng số)</div>
+<table class="tbl"><tr style="--i:0"><th rowspan="2">Yếu tố then chốt cho thành công</th><th rowspan="2">Trọng số</th>${CO.map(c=>`<th class="g" colspan="2" style="--c:${c[1]}">${c[0]}</th>`).join('')}</tr><tr style="--i:0">${CO.map(()=>'<th>Đánh giá</th><th>Điểm</th>').join('')}</tr>
+${R.map((r,k)=>`<tr style="--i:${k+1}"><td>${r[0]}</td><td>${r[1]}</td>${r.slice(2).map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}
+<tr class="tt" style="--i:11"><td>TỔNG</td><td>1,00</td>${CO.map(c=>`<td colspan="2" style="--c:${c[1]}"><span class="num ${c[0]=='Viettel'?'best':''}" data-v="${c[2]}">${c[2]}</span><span class="bar" style="--w:${parseFloat(c[2].replace(',','.'))/4*100}%"></span></td>`).join('')}</tr></table>
+<div class="rem"><div style="--c:#dc2626;--i:0">Viettel: Tổng điểm cao nhất, nổi bật về thị phần và độ phủ.</div><div style="--c:#2563eb;--i:1">VNPT: là nhà mạng cân bằng. Nổi bật ở dịch vụ và dữ liệu</div><div style="--c:#0e9f6e;--i:2">MobiFone: Có lợi thế ở một số tiêu chí</div><div style="--c:#f47920;--i:3">FPT: Nổi bật ở chăm sóc khách hàng, dịch vụ số</div></div>`;
+const efeRows=[
+['PDPL 2026 và yêu cầu lưu trữ dữ liệu tại Việt Nam thúc đẩy nhu cầu Data Center/Cloud nội địa','0,12','4','0,48','Luật hiệu lực từ 01/01/2026; DC tăng trưởng 19%/năm, quy mô dự báo từ 104 MW lên khoảng 600 MW vào năm 2030'],
+['Khoảng trống công suất Data Center và nhu cầu AI/Cloud tăng tốc','0,10','3','0,30','FPT Telecom chiếm khoảng 11% thị phần DC, sau Viettel (41%), VNPT (24%) và CMC (12%)'],
+['Nhu cầu băng thông tăng mạnh','0,08','4','0,32','<a href="https://mst.gov.vn/toc-do-internet-viet-nam-but-pha-lot-top-10-toan-cau-197251125151701543.htm" target="_blank" rel="noopener noreferrer">Việt Nam thuộc nhóm 10 quốc gia có tốc độ Internet cố định cao nhất thế giới; 24,4 triệu thuê bao băng rộng cố định (+3,9%)</a>'],
+['Vị thế B2G sau chuyển giao vốn cho Bộ Công an','0,08','3','0,24','Chuyển giao ngày 16/07/2025; kỳ vọng tiếp cận các dự án an ninh quốc gia'],
+['Tiên phong XGS-PON/Wi-Fi 7 và độc quyền Ngoại hạng Anh','0,07','4','0,28','<a href="https://fpttrangchu.vn/wifi7/speedx2/" target="_blank" rel="noopener noreferrer">SpeedX2 (2 Gbps)</a>, <a href="https://fpt.vn/internet/fpt-speedx10" target="_blank" rel="noopener noreferrer">SpeedX10 (10 Gbps)</a>; <a href="https://fpt.vn/tin-tuc/fpt-play-so-huu-ban-quyen-giai-ngoai-hang-anh-tai-viet-nam-13483.html" target="_blank" rel="noopener noreferrer">bản quyền EPL đến mùa giải 2030/31</a>'],
+['Thị phần băng rộng cố định thấp hơn Viettel và VNPT','0,13','2','0,26','FPT Telecom 17,9%; VNPT 38,9%; Viettel 38,2%'],
+['Áp lực cạnh tranh giá từ Viettel','0,12','2','0,24','<a href="https://fpt-tphcm.vn/fpt-wifi-7-hcm/" target="_blank" rel="noopener noreferrer">Viettel GIGA 2Gbps từ 485.000đ/tháng; FPT SpeedX2 2Gbps khoảng 999.000đ/tháng</a>'],
+['Chi phí CapEx gia tăng do lạm phát','0,08','3','0,24','<a href="https://baochinhphu.vn/cpi-nam-2025-tang-331-dat-muc-tieu-quoc-hoi-de-ra-102260105160120695.htm" target="_blank" rel="noopener noreferrer">CPI năm 2025 tăng 3,31%</a>'],
+['Dư địa thuê bao mới hạn chế','0,07','3','0,21','Tỷ lệ hộ gia đình sử dụng cáp quang đạt 85,1%; tăng trưởng thuê bao mới khoảng 4%/năm'],
+['Cạnh tranh từ MVNO và OTT thay thế','0,05','2','0,10','<a href="https://tapchicongthuong.vn/thuc-trang-va-xu-huong-phat-trien-mang-di-dong-ao--mvno--tai-thi-truong-vien-thong-viet-nam-138416.htm" target="_blank" rel="noopener noreferrer">Thị trường MVNO ước đạt 233 triệu USD</a>; OTT truyền hình tăng trưởng khoảng 33%']
+];
+const efe=`<div class="efe-wrap"><table class="efe"><colgroup><col style="width:34%"><col style="width:7%"><col style="width:6%"><col style="width:9%"><col style="width:44%"></colgroup><thead><tr class="efe-title" style="--i:0"><th colspan="5">MA TRẬN EFE (EXTERNAL FACTOR EVALUATION) - FPT TELECOM</th></tr><tr class="efe-head" style="--i:1"><th>Yếu tố bên ngoài chủ yếu</th><th>Trọng số</th><th>Điểm</th><th>Điểm có trọng số</th><th>Cơ sở / Nguồn số liệu</th></tr></thead><tbody><tr class="efe-group efe-opportunity" style="--i:2"><td colspan="5">CƠ HỘI</td></tr>${efeRows.slice(0,5).map((r,i)=>`<tr class="efe-data" style="--i:${i+3}">${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}<tr class="efe-group efe-threat" style="--i:8"><td colspan="5">NGUY CƠ</td></tr>${efeRows.slice(5).map((r,i)=>`<tr class="efe-data" style="--i:${i+9}">${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}<tr class="efe-total" style="--i:14"><td>TỔNG CỘNG</td><td>1,00</td><td></td><td>2,67</td><td></td></tr></tbody></table></div>`;
+const G='#16a34a',RD='#dc2626';
+const S=[
+`<div class="cv0" style="position:absolute;inset:0"><div class="w1"></div><div class="w2"></div><div class="w3"></div><div class="cover-decor" aria-hidden="true"><i class="orbit o1"></i><i class="orbit o2"></i><i class="spark s1"></i><i class="spark s2"></i><i class="spark s3"></i><i class="spark s4"></i></div><div class="ctl"><img class="lgi" src="logo-fpt.png" alt="FPT Telecom" data-s="4.4" data-t="1" style="height:11cqw;display:block"></div><div class="ct"><h3>PHÂN TÍCH, ĐÁNH GIÁ MÔI TRƯỜNG BÊN NGOÀI, TÌM RA CƠ HỘI, THÁCH THỨC VÀ XÂY DỰNG MA TRẬN EFE, MA TRẬN CPM CỦA CÔNG TY FPT TELECOM</h3><p>GVHD: TS. NGUYỄN THANH LONG<br>NHÓM THỰC HIỆN: NHÓM 7</p></div><div class="ring"><img class="lgi" src="FPT_logo_2010.png" alt="FPT" data-s="4.4" data-t="0" style="width:62%;height:auto;display:block"></div></div>`,
+`<h1 class="b">CÁC THÀNH VIÊN NHÓM 7</h1><div class="mem">${mem.map((m,i)=>`<div class="m" style="--i:${i}"><div class="ico">👤</div><div><b>${m[0]}</b><span>MSSV: ${m[1]}</span></div></div>`).join('')}</div><div class="line"></div>`,
+`<div class="int">GIỚI THIỆU DOANH NGHIỆP FPT TELECOM</div><div class="video-frame"><span class="video-label">FPT TELECOM · VIDEO GIỚI THIỆU</span><video src="snaptik.vn_7596929211101695249.mp4" controls preload="metadata" playsinline aria-label="Video giới thiệu FPT Telecom"></video></div>`,
+`<h1 class="long">I. Phân tích, đánh giá môi trường bên ngoài tìm ra cơ hội, nguy cơ tác động đến công ty FPT Telecom.</h1><div class="pl">${pe.map((p,i)=>`<div class="p" style="--c:${p[2]};--i:${i}"><em>${i+1}</em><b>${p[0]}</b><div>${p[1]}</div></div>`).join('')}</div>`,
+two('CHÍNH TRỊ - CHÍNH PHỦ - PHÁP LUẬT',card(G,'CƠ HỘI','Cơ hội','🚀',['Chuyển đổi số: Nghị quyết 57-NQ/TW. Thúc đẩy hạ tầng số và chuyển đổi số quốc gia.','Dữ liệu và an ninh mạng: Luật An ninh mạng 2018, Nghị định 13/2023/NĐ-CP. Tạo nhu cầu về bảo mật, Cloud và trung tâm dữ liệu.']),card(RD,'THÁCH THỨC','Thách thức','⚠️',['Quản lí viễn thông: Cấp phép và phân bổ tần số. Chi phí giấy phép, yêu cầu triển khai và phủ sóng.','Địa chính trị: Hạn chế xuất khẩu công nghệ. Nguy cơ gián đoạn nguồn cung thiết bị mạng.','Chuyển giao cổ phần cho Bộ Công An: SCIC chuyển 50.2% cp sang BCA. Tăng cường tiềm lực cho BCA đảm bảo an ninh, trật tự xã hội.'],'✖')),
+two('ẢNH HƯỞNG ĐẾN KINH TẾ',card(G,'CƠ HỘI','Cơ hội','📈',['Tăng trưởng kinh tế: Nhu cầu dịch vụ viễn thông và dịch vụ giá trị gia tăng.','Data Center và Cloud: Cơ hội mở rộng hạ tầng dữ liệu và AI.']),card(RD,'THÁCH THỨC','Thách thức','💱',['Biến động tỷ giá: Làm tăng chi phí nhập khẩu thiết bị mạng và máy chủ.','Cạnh tranh về giá: Gây áp lực lên doanh thu bình quân và biên lợi nhuận.'],'✖')),
+`<h1 class="environment-title">MÔI TRƯỜNG VÀ TỰ NHIÊN</h1><figure class="environment-photo" tabindex="0" role="button" aria-label="Phóng to bản đồ các tuyến cáp quang biển"><img src="23668_26451_462.jpg" alt="Bản đồ các tuyến cáp quang biển ở Đông Nam Á"><figcaption>Bấm để phóng to ảnh</figcaption></figure><div class="cards environment-cards">${card(G,'MÔI TRƯỜNG','Môi trường','🌱',['Cơ hội phát triển trung tâm dữ liệu xanh.','Định hướng Net Zero 2024 tối ưu năng lượng và giảm phát thải.'])}${card(RD,'TỰ NHIÊN','Tự nhiên','🌪️',['Bão lũ có thể gây hư hỏng hạ tầng.','Đứt cáp quang gây gián đoạn internet quốc tế.'],'✖')}</div>`,
+`<div class="tg">🎯</div><div class="big">Phần II. Ma trận đánh giá các yếu tố bên ngoài (EFE)</div>`,
+efe,
+`<div class="cpm-intro"><div class="cpm-photo"><img src="cpm-antenna.jpg" alt="Ăng-ten viễn thông"></div><div class="cpm-panel"><h2 class="cpm-heading">III. MA TRẬN HÌNH ẢNH<br> CẠNH TRANH (CPM)</h2><div class="cpm-logos"><div class="cpm-brand"><img src="logo-fpt.png" alt="FPT Telecom"></div><div class="cpm-brand"><img src="Logo_Viettel_from_7_January_2021_Slogan.svg" alt="Viettel"></div><div class="cpm-brand"><img src="logovnpt-1727255772259862245462.png" alt="VNPT"></div><div class="cpm-brand"><img src="MobiFone_logo.svg.png" alt="MobiFone"></div></div></div></div>`,
+tbl,
+two('VỊ THẾ CẠNH TRANH CỦA FPT',card(G,'ĐIỂM MẠNH','Lợi Thế Cạnh Tranh','🛡️',['Chăm sóc khách hàng &amp; thương hiệu: Uy tín dẫn đầu và trải nghiệm người dùng vượt trội.','Đổi mới dịch vụ số: Tiên phong triển khai các giải pháp công nghệ tiên tiến.','Hệ sinh thái toàn diện: Kết hợp Smart Home, FPT Play và Wi-Fi AI thế hệ mới.']),card(RD,'THÁCH THỨC','Bất Lợi Cạnh Tranh','⚠️',['Quy mô thị phần: Áp lực cạnh tranh về thị phần và số lượng thuê bao.','Hạ tầng mạng lưới: Độ phủ hạ tầng chưa thực sự đồng đều giữa các khu vực.','Mạng di động: Năng lực cạnh tranh quy mô mạng di động còn hạn chế.'],'✖'),1),
+two('KẾT LUẬN VÀ ĐỊNH HƯỚNG CHIẾN LƯỢC',card('#ea580c','','1. Tận Dụng Cơ Hội','🚀',['Mở rộng B2B: Tăng cường hạ tầng Data Center, Cloud và Managed Services.','Đẩy mạnh B2C: Gia tăng gói combo Internet + FPT Play + Smart Home.'],'➔',1),card('#2563eb','','2. Thích Ứng Nguy Cơ','🛡️',['Chia sẻ hạ tầng: Đẩy mạnh hợp tác chia sẻ hạ tầng tối ưu chi phí đầu tư.','Dịch vụ di động: Phát triển phương án cung cấp dịch vụ di động linh hoạt.'],'➔',1),0,1),
+`<div class="th" style="position:absolute;inset:0"><small style="top:14cqw">QUẢN TRỊ CHIẾN LƯỢC</small><div class="big">XIN CẢM ƠN!</div><small style="top:36cqw">Nhóm 7 &nbsp;|&nbsp; 04.11.2026</small></div>`
+];
+const sl=document.getElementById('sl'),deck=document.getElementById('deck'),dots=document.getElementById('dots');
+S.forEach((h,k)=>{const s=document.createElement('section');s.className='slide';s.innerHTML=h;if(k>=2&&!s.querySelector('.line')){const line=document.createElement('div');line.className='line';s.appendChild(line)}sl.appendChild(s);const d=document.createElement('span');d.className='dot';d.onclick=()=>go(k);dots.appendChild(d)});
+const E=[...sl.children],D=[...dots.children];let i=0,t0=0;
+const environmentPhoto=E.find(s=>s.querySelector('.environment-photo'))?.querySelector('.environment-photo');
+const imageLightbox=document.getElementById('imageLightbox'),lightboxImage=document.getElementById('imageLightboxContent');
+function openEnvironmentPhoto(){const image=environmentPhoto.querySelector('img');lightboxImage.src=image.src;lightboxImage.alt=image.alt;imageLightbox.showModal()}
+environmentPhoto.addEventListener('click',openEnvironmentPhoto);
+environmentPhoto.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openEnvironmentPhoto()}});
+document.getElementById('closeImageLightbox').addEventListener('click',()=>imageLightbox.close());
+imageLightbox.addEventListener('click',e=>{if(e.target===imageLightbox)imageLightbox.close()});
+function go(n){
+  i=(n+E.length)%E.length;
+  E.forEach((s,k)=>{s.classList.remove('on');if(k===i){void s.offsetWidth;s.classList.add('on')}});
+  D.forEach((d,k)=>d.classList.toggle('on',k===i));
+  deck.dataset.i=i;document.getElementById('pg').style.width=((i+1)/E.length*100)+'%';
+  t0=performance.now();
+  E[i].querySelectorAll('.num').forEach(el=>{const v=parseFloat(el.dataset.v.replace(',','.')),st=performance.now()+2600;
+    (function f(t){const p=Math.max(0,Math.min(1,(t-st)/1400));el.textContent=(v*p).toFixed(2).replace('.',',');if(p<1)requestAnimationFrame(f)})(performance.now())});
+}
+document.getElementById('nx').onclick=()=>go(i+1);document.getElementById('pv').onclick=()=>go(i-1);
+addEventListener('keydown',e=>{if(imageLightbox.open)return;if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+let tx=0;addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)go(i+(d<0?1:-1))});
+go(0);
+document.querySelectorAll('img.lgi').forEach(im=>im.addEventListener('error',()=>{const w=document.createElement('span');w.innerHTML=LG(+im.dataset.s).replace(im.dataset.t==='0'?'<small>Telecom</small>':'','');im.replaceWith(w.firstChild)}));
+// Nền mạng lưới chiến lược
+const cv=document.getElementById('cv'),x=cv.getContext('2d');
+function rs(){cv.width=cv.clientWidth;cv.height=cv.clientHeight}rs();addEventListener('resize',rs);
+const N=Array.from({length:32},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0004,vy:(Math.random()-.5)*.0004}));
+(function f(){
+  const w=cv.width,h=cv.height;x.clearRect(0,0,w,h);
+  for(const a of N){a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>1)a.vx*=-1;if(a.y<0||a.y>1)a.vy*=-1}
+  for(let a=0;a<N.length;a++)for(let b=a+1;b<N.length;b++){const d=Math.hypot((N[a].x-N[b].x)*w,(N[a].y-N[b].y)*h);
+    if(d<w*.14){x.strokeStyle='rgba(36,59,107,'+.16*(1-d/(w*.14))+')';x.beginPath();x.moveTo(N[a].x*w,N[a].y*h);x.lineTo(N[b].x*w,N[b].y*h);x.stroke()}}
+  x.fillStyle='rgba(37,99,235,.35)';for(const a of N){x.beginPath();x.arc(a.x*w,a.y*h,w*.0028,0,7);x.fill()}
+  requestAnimationFrame(f);
+})();
+</script>
+</body>
+</html>
